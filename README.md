@@ -61,3 +61,39 @@ function akashbadole_change_translate_text_multiple( $translated ) {
 }
 add_filter( 'gettext', 'akashbadole_change_translate_text_multiple', 20 );
 ```
+
+# Coupon List - Cart Page
+
+```sh
+add_action('woocommerce_cart_coupon', 'woocommerce_cart_coupon_list');
+function woocommerce_cart_coupon_list() {
+    $args = array(
+	    'posts_per_page'   => 5,
+	    'orderby'          => 'title',
+	    'order'            => 'desc',
+	    'post_type'        => 'shop_coupon',
+	    'post_status'      => 'publish',
+	);
+    
+	$coupons = get_posts( $args );
+
+	$coupon_names = array();
+	foreach ( $coupons as $coupon ) {
+		// Get the name for each coupon post
+		$coupon_name = $coupon->post_title;
+		array_push( $coupon_names, $coupon_name );
+	}
+    ?>
+    	<div>
+    		Choose your coupon code: 
+    	 <?php
+    	 	foreach ($coupon_names as $key => $value) {
+    	 		echo "<span><b>| " . $value . " |</b></span>\r\n";
+    	 	}
+    	 ?>
+		</div>
+    <?php
+       
+}
+
+```
