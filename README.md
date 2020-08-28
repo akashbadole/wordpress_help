@@ -28,7 +28,7 @@ Theme Check<br>
 
 
 # Text Translate
-
+```sh
 function ra_change_translate_text( $translated_text ) {
 	if ( $translated_text == 'Old Text' ) {
 		$translated_text = 'New Translation';
@@ -36,9 +36,10 @@ function ra_change_translate_text( $translated_text ) {
 	return $translated_text;
 }
 add_filter( 'gettext', 'ra_change_translate_text', 20 );
-
+```
 
 ## use only one data
+```sh
 function ra_change_translate_text( $translated_text ) {
 	if ( $translated_text == 'Old Text' ) {
 		$translated_text = 'New Translation';
@@ -46,9 +47,10 @@ function ra_change_translate_text( $translated_text ) {
 	return $translated_text;
 }
 add_filter( 'gettext', 'ra_change_translate_text', 20 );
+```
 
 ## use array format to add more text
-
+```sh
 function akashbadole_change_translate_text_multiple( $translated ) {
 	$text = array(
 		'Forminator' => 'Survey',
@@ -58,4 +60,4 @@ function akashbadole_change_translate_text_multiple( $translated ) {
 	return $translated;
 }
 add_filter( 'gettext', 'akashbadole_change_translate_text_multiple', 20 );
-
+```
