@@ -25,3 +25,37 @@ Regenerate Thumbnails<br>
 Simply Show IDs<br>
 Theme Test Drive<br>
 Theme Check<br>
+
+
+# Text Translate
+
+function ra_change_translate_text( $translated_text ) {
+	if ( $translated_text == 'Old Text' ) {
+		$translated_text = 'New Translation';
+	}
+	return $translated_text;
+}
+add_filter( 'gettext', 'ra_change_translate_text', 20 );
+
+
+## use only one data
+function ra_change_translate_text( $translated_text ) {
+	if ( $translated_text == 'Old Text' ) {
+		$translated_text = 'New Translation';
+	}
+	return $translated_text;
+}
+add_filter( 'gettext', 'ra_change_translate_text', 20 );
+
+## use array format to add more text
+
+function akashbadole_change_translate_text_multiple( $translated ) {
+	$text = array(
+		'Forminator' => 'Survey',
+    'Old Text' => 'New Text',
+	);
+	$translated = str_ireplace(  array_keys($text),  $text,  $translated );
+	return $translated;
+}
+add_filter( 'gettext', 'akashbadole_change_translate_text_multiple', 20 );
+
