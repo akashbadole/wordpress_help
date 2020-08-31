@@ -1,6 +1,6 @@
 # wordpress_help
 
-##Wordpress Developer tools(Post Types, Custom Fields and other developer friendly plugins)
+## Wordpress Developer tools(Post Types, Custom Fields and other developer friendly plugins)
 Pods(https://wordpress.org/plugins/pods/)<br>
 Toolset Types(https://wordpress.org/plugins/types/)<br>
 Advance Custom Fields(https://wordpress.org/plugins/advanced-custom-fields/)<br>
@@ -132,5 +132,33 @@ echo "</pre>";
 // echo $obj->Peter;
 
 echo wp_remote_retrieve_body( $response )->userId . "ss";
+
+## wp_remote_get() and wp_remote_post() and wp_remote_request()
+
+It’s better to execute JSON response like that to keep it managed.
+
+$request = wp_remote_get($url, $options);
+ 
+return load_request($request);
+ 
+function load_request($response) {
+  try {
+    $json = json_decode( $response['body'] );
+  } catch ( Exception $ex ) {
+    $json = null;
+  }
+  return $json;
+}
+
+
+$apiUrl = 'https://example.com/wp-json/wp/v2/posts?page=0&per_page=0';
+$response = wp_remote_get($apiUrl);
+$responseBody = wp_remote_retrieve_body( $response );
+$result = json_decode( $responseBody );
+if ( is_array( $result ) && ! is_wp_error( $result ) ) {
+    // Work with the $result data
+} else {
+    // Work with the error
+}
 
 ```
