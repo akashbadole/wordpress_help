@@ -97,3 +97,40 @@ function woocommerce_cart_coupon_list() {
 }
 
 ```
+
+## Admin Menu 
+
+```sh
+function register_custom_menu_page() {
+    add_menu_page('custom menu title', 'custom menu', 'add_users', 'custompage', '_custom_menu_page', null, 6); 
+}
+add_action('admin_menu', 'register_custom_menu_page');
+
+function _custom_menu_page(){
+   echo "Admin Page Test";  
+```
+
+## Wordpress API Call
+
+```sh
+$url = 'https://jsonplaceholder.typicode.com/todos';
+$arguments = array(
+			'method' => 'GET'
+);
+   /** @var array|WP_Error $response */
+$response = wp_remote_get( $url, $arguments );
+ 
+if (is_wp_error( $response )) {
+	$error_message = $response->get_error_message();
+	echo "Error Hai";
+}
+
+echo "<pre>";
+var_dump(wp_remote_retrieve_body( $response ));
+echo "</pre>";
+
+// echo $obj->Peter;
+
+echo wp_remote_retrieve_body( $response )->userId . "ss";
+
+```
