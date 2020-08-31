@@ -162,3 +162,6 @@ if ( is_array( $result ) && ! is_wp_error( $result ) ) {
 }
 
 ```
+## [Wordpress Useful Functions](https://github.com/taniarascia/wp-functions/) Read
+
+
