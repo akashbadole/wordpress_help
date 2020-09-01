@@ -1,3 +1,4 @@
+```sh
 <?php
 // remove unnecessary header information
 function remove_header_info() {
@@ -57,8 +58,8 @@ add_action('do_feed_atom_comments', 'fb_disable_feed', 1);
 show_admin_bar( false );
 
 
-#disable redirect to login page :
-#http://wordpress.stackexchange.com/questions/85529/how-to-disable-multisite-sign-up-page
+# disable redirect to login page :
+# http://wordpress.stackexchange.com/questions/85529/how-to-disable-multisite-sign-up-page
 function rbz_prevent_multisite_signup() 
 {
     wp_redirect( site_url() );
@@ -74,3 +75,4 @@ function remove_x_pingback($headers) {
 }
 add_filter('wp_headers', 'remove_x_pingback');
 ?>
+```
