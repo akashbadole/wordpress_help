@@ -167,7 +167,7 @@ if ( is_array( $result ) && ! is_wp_error( $result ) ) {
 ## Custom API
 ### Creating a custom endpoint
 
-sh```
+```sh
 
 <?php
 add_action( 'rest_api_init', 'my_first_register_route' );
@@ -188,7 +188,7 @@ function custom_phrase() {
 ```
 #### Restricting access to the endpoint
 #### Restricting access can be achieved by using 'permission_callback'.
-sh```
+```sh
 <?php
 add_action( 'rest_api_init', 'my_register_route' );
 
@@ -212,7 +212,8 @@ function custom_phrase() {
 ```
 
 #### Fetching WordPress data using an endpoint
-sh```
+
+```sh
 <?php
 add_action( 'rest_api_init', 'my_register_route');
 
@@ -260,7 +261,7 @@ function my_posts() {
 #### Filtering the data
 #### Continuing on the above example, we will now try to fetch posts for a given author only.
 
-sh```
+```sh
 <?php
 add_action( 'rest_api_init', 'my_register_route');
 function my_register_route() {
