@@ -164,4 +164,152 @@ if ( is_array( $result ) && ! is_wp_error( $result ) ) {
 ```
 ## [Wordpress Useful Functions](https://github.com/taniarascia/wp-functions/) Read
 
+## Custom API
+### Creating a custom endpoint
 
+sh```
+
+<?php
+add_action( 'rest_api_init', 'my_first_register_route' );
+
+function my_first_register_route() {
+    register_rest_route( 'my-route', 'my-phrase', array(
+                    'methods' => 'GET',
+                    'callback' => 'custom_phrase',
+                )
+            );
+}
+
+function custom_phrase() {
+    return rest_ensure_response( 'My first REST API' );
+}
+?>
+
+```
+#### Restricting access to the endpoint
+#### Restricting access can be achieved by using 'permission_callback'.
+sh```
+<?php
+add_action( 'rest_api_init', 'my_register_route' );
+
+function my_register_route() {
+    register_rest_route( 'my-route', 'my-phrase', array(
+                    'methods' => 'GET',
+                    'callback' => 'custom_phrase',
+                    'permission_callback' => function() {
+                            return current_user_can( 'edit_posts' );
+                        },
+                )
+            );
+}
+
+function custom_phrase() {
+    return rest_ensure_response( 'Hello World! This is my first REST API' );
+}
+?>
+
+
+```
+
+#### Fetching WordPress data using an endpoint
+sh```
+<?php
+add_action( 'rest_api_init', 'my_register_route');
+
+function my_register_route() {
+            
+        register_rest_route( 'my-route', 'my-posts', array(
+                'methods' => 'GET',
+                'callback' => 'my_posts',
+                'permission_callback' => function() {
+                    return current_user_can( 'edit_others_posts' );
+                    }, 
+
+        );
+}
+   
+function my_posts() {
+            
+    // default the author list to all
+    $post_author = 'all';
+
+    // get the posts
+    $posts_list = get_posts( array( 'type' => 'post', 'author' => $post_author ) );
+    $post_data = array();
+
+    foreach( $posts_list as $posts) {
+        $post_id = $posts->ID;
+        $post_author = $posts->post_author;
+        $post_title = $posts->post_title;
+        $post_content = $posts->post_content;
+
+        $post_data[ $post_id ][ 'author' ] = $post_author;
+        $post_data[ $post_id ][ 'title' ] = $post_title;
+        $post_data[ $post_id ][ 'content' ] = $post_content;
+
+    }
+
+    wp_reset_postdata();
+
+    return rest_ensure_response( $post_data );
+}
+        
+?>
+```
+
+#### Filtering the data
+#### Continuing on the above example, we will now try to fetch posts for a given author only.
+
+sh```
+<?php
+add_action( 'rest_api_init', 'my_register_route');
+function my_register_route() {
+            
+      register_rest_route( 'my-route', 'my-posts/(?P<id>\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'my_posts',
+            'args' => array(
+                    'id' => array( 
+                        'validate_callback' => function( $param, $request, $key ) {
+                            return is_numeric( $param );
+                        }
+                    ),
+                ),
+            'permission_callback' => function() {
+                return current_user_can( 'edit_others_posts' );
+                }, 
+        );
+}
+   
+function my_posts( $data ) {
+            
+    // default the author list to all
+    $post_author = 'all';
+    
+    // if ID is set
+    if( isset( $data[ 'id' ] ) ) {
+          $post_author = $data[ 'id' ];
+    }
+    
+    // get the posts
+    $posts_list = get_posts( array( 'type' => 'post', 'author' => $post_author ) );
+    $post_data = array();
+            
+    foreach( $posts_list as $posts) {
+        $post_id = $posts->ID;
+        $post_author = $posts->post_author;
+        $post_title = $posts->post_title;
+        $post_content = $posts->post_content;
+        
+        $post_data[ $post_id ][ 'author' ] = $post_author;
+        $post_data[ $post_id ][ 'title' ] = $post_title;
+        $post_data[ $post_id ][ 'content' ] = $post_content;
+    }
+            
+    wp_reset_postdata();
+            
+    return rest_ensure_response( $post_data );
+}
+        
+?>
+```
