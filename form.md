@@ -54,7 +54,7 @@ get_header(); ?>
             );
             $success=$wpdb->insert( $table, $data, $format );
             if($success){
-				echo '<h3>Your request successfully send to HomeFix! Our Staff will contact you!</h3>' ; 
+				echo '<h3>Your request successfully Submitted</h3>' ; 
 			}
 		}
 		else   { ?>
