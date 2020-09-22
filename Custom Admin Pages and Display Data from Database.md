@@ -35,7 +35,8 @@ CREATE TABLE `wpdata` (
 add_action( 'admin_menu', 'my_admin_menu' );
 
 function my_admin_menu() {
-	add_menu_page( 'My Top Level Menu Example', 'Top Level Menu', 'manage_options', 'myplugin/myplugin-admin-page.php', 'myplguin_admin_page', 'dashicons-tickets', 6  );
+	add_menu_page( 'My Top Level Menu Example', 'Top Level Menu', 'manage_options', 
+	'myplugin/myplugin-admin-page.php', 'myplguin_admin_page', 'dashicons-tickets', 6  );
 }
 
 ```
@@ -82,10 +83,11 @@ add_action( 'admin_menu', 'my_admin_menu' );
 	}
 	
 	function my_admin_menu() {
-		add_menu_page('Customer Request View', 'Customer Requests', 'manage_options', 'myplugin/View_Customer_Details.php', 'customerview_admin_page', 'dashicons-tag', 6  );
+		add_menu_page('Customer Request View', 'Customer Requests', 'manage_options',
+		'myplugin/View_Customer_Details.php', 'customerview_admin_page', 'dashicons-tag', 6  );
 	}
 ```
 
 
 ### Output
-![Wordpress Menu]: (https://raw.githubusercontent.com/akashbadole/wordpress_help/master/Creating-Custom-Admin-Pages-and-Display.png)
+<img src="https://raw.githubusercontent.com/akashbadole/wordpress_help/master/Creating-Custom-Admin-Pages-and-Display.png" alt="Wordpress menu and data">
