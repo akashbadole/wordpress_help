@@ -85,5 +85,7 @@ add_action( 'admin_menu', 'my_admin_menu' );
 		add_menu_page('Customer Request View', 'Customer Requests', 'manage_options', 'myplugin/View_Customer_Details.php', 'customerview_admin_page', 'dashicons-tag', 6  );
 	}
 ```
+
+
 ### Output
-[Wordpress Menu]: https://raw.githubusercontent.com/akashbadole/wordpress_help/master/Creating-Custom-Admin-Pages-and-Display.png "Wordpress Menu" 
+![Wordpress Menu]: (https://raw.githubusercontent.com/akashbadole/wordpress_help/master/Creating-Custom-Admin-Pages-and-Display.png)
