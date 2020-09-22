@@ -89,3 +89,7 @@ get_header(); ?>
 
 
 ```
+
+#### Output
+
+<img src="https://raw.githubusercontent.com/akashbadole/wordpress_help/master/Form-%E2%80%93-luckywp.png" alt="Wordpress form store into Database ">
