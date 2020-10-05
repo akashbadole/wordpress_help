@@ -314,3 +314,37 @@ function my_posts( $data ) {
         
 ?>
 ```
+
+```sh
+For Replacing Content
+// Filter hook
+add_filter('the_content',array('hotwebideas_fix_wordpress','fix_spelling'));
+
+class hotwebideas_fix_wordpress
+{
+	function fix_spelling($content)
+	{
+
+		$content= str_replace('header','HEADER',$content);
+		$content = $content . "<hr/>Thank you for watching this video tutorial.";
+		return "$content";
+	}
+
+}
+
+```
+```sh
+
+# Insert Post/Pages content, title, publish throgh coding
+
+$args = array (
+		'post_title' => 'Your are Starter',
+		'post_content' => 'So this is the part of my daily life, it will create my hosala',
+		'post_status' => 'publish',
+		'post_type' => 'post',
+		// 'post_author' => 1
+
+);
+//$post_id = wp_insert_post( $args);
+echo "the new post id is #". $post_id.'</hr>';
+```
