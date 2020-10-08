@@ -314,9 +314,9 @@ function my_posts( $data ) {
         
 ?>
 ```
-
+## For Replacing Content
 ```sh
-For Replacing Content
+
 // Filter hook
 add_filter('the_content',array('hotwebideas_fix_wordpress','fix_spelling'));
 
@@ -333,9 +333,10 @@ class hotwebideas_fix_wordpress
 }
 
 ```
+# Insert Post/Pages content, title, publish throgh coding
 ```sh
 
-# Insert Post/Pages content, title, publish throgh coding
+
 
 $args = array (
 		'post_title' => 'Your are Starter',
@@ -348,9 +349,9 @@ $args = array (
 //$post_id = wp_insert_post( $args);
 echo "the new post id is #". $post_id.'</hr>';
 ```
-
-```sh
 ## add extra profile field in wordpress
+```sh
+
 function my_show_profile_fields($user){?>
 
 <h3>Social Media Information</h3>
@@ -390,7 +391,7 @@ add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
 ?>
 
 ```
-
+## Admin Message post, pages
 ```sh
 
 // Admin Message post, pages
