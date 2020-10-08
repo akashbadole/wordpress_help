@@ -348,3 +348,45 @@ $args = array (
 //$post_id = wp_insert_post( $args);
 echo "the new post id is #". $post_id.'</hr>';
 ```
+
+```sh
+## add extra profile field in wordpress
+function my_show_profile_fields($user){?>
+
+<h3>Social Media Information</h3>
+	<table class="form-table">
+		<tr>
+			<th>
+				<label for="jobtitle"><?php _e("Job Title");?></label>
+			</th>
+			<td>
+				<input type="text" name="jobtitle" id="jobtitle" value="<?php echo esc_attr( get_the_author_meta( 'jobtitle',  $user->ID) ); ?>" class="regular-text" >
+				<span class="description">Please Enter Job Title</span>
+			</td>
+		</tr>
+	</table>
+<!-- the_author_meta( $meta_key, $user_id ); -->
+
+<?php }
+
+function my_save_extra_profile_fields($user_id){
+
+	if(!current_user_can( 'edit_user', $user_id )){
+		return false;
+	}
+update_usermeta( $user_id, 'jobtitle', $_REQUEST['jobtitle']);
+
+}
+
+
+add_action( 'show_user_profile','my_show_profile_fields' );
+add_action( 'edit_user_profile', 'my_show_profile_fields' );
+
+add_action('personal_options_update','my_save_extra_profile_fields');
+add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
+
+
+
+?>
+
+```
