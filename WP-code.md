@@ -408,3 +408,28 @@ if(strpos($_SERVER['REQUEST_URI'], 'post-new')>0 || strpos($_REQUEST['REQUEST_UR
 }
 
 ```
+## Dashboard Widget Create
+```sh
+add_action('wp_dashboard_setup','my_new_dashboard');
+function my_new_dashboard(){
+	global $wp_meta_boxs;
+	global $current_user;
+	$username = $current_user->user_login;
+	wp_add_dashboard_widget( 'custom_help_widget','Time and Work','main_dashboard_data' );
+}
+
+function main_dashboard_data(){
+	global $current_user;
+
+	$username = $current_user -> user_login;
+	echo 'Greeting, <b>'.$username . '</b> . Today is ' . Date('m/d/Y');
+}
+```
+## Footer text change
+```sh
+add_action('admin_footer_text','footer_change');
+
+function footer_change(){
+	echo "Thank you for creating with <a href='#'>Akash Website</a>";
+}
+```
