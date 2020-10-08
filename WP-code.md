@@ -413,8 +413,7 @@ if(strpos($_SERVER['REQUEST_URI'], 'post-new')>0 || strpos($_REQUEST['REQUEST_UR
 add_action('wp_dashboard_setup','my_new_dashboard');
 function my_new_dashboard(){
 	global $wp_meta_boxs;
-	global $current_user;
-	$username = $current_user->user_login;
+	
 	wp_add_dashboard_widget( 'custom_help_widget','Time and Work','main_dashboard_data' );
 }
 
