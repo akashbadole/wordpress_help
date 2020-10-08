@@ -390,3 +390,20 @@ add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
 ?>
 
 ```
+
+```sh
+
+// Admin Message post, pages
+
+add_action('all_admin_notices','admin_message' );
+
+function admin_message(){
+
+if(strpos($_SERVER['REQUEST_URI'], 'post-new')>0 || strpos($_REQUEST['REQUEST_URI'],'post.php')>0 || strpos($_REQUEST['REQUEST_URI'],'page.php')>0){
+
+	echo '<p style="border:1px grey solid;margin-top:50px;padding:20px;">Hello Editor <br/>Please see our privacy policy and term and condition</>';
+}
+
+}
+
+```
