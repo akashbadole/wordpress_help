@@ -432,3 +432,23 @@ function footer_change(){
 	echo "Thank you for creating with <a href='#'>Akash Website</a>";
 }
 ```
+
+## Shortcode with attributes(parameters)
+
+```sh
+
+add_shortcode( 'date-and-time', 'time_and_date_added' );
+
+function time_and_date_added($atts){
+
+	$a     = shortcode_atts( array(
+		'color'   => '#FF0000',
+		'bgcolor' => '#CCC',
+	), $atts);
+	$color = $a['color'];
+	$color = $a['bgcolor'];
+	return '<span style="background-color:'.$bgcolor.';color:'.$color.'">'.date('m/d/Y H:i:s'). '</span>' ;
+	
+}
+
+```
