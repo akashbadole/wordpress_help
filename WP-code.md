@@ -454,7 +454,7 @@ function time_and_date_added($atts){
 ```
 
 
-```sh
+## database Query
 Useful SQL Queries To Clean Up Your WordPress Database
 After years of usage, your WordPress database can contain weird characters, be filled with data you don’t need anymore, and so on. In this article, you will learn about SQL queries to clean up your WordPress database.
 
@@ -602,4 +602,3 @@ Let’s consider that NEW_AUTHOR_ID is the ID of the new author, and OLD_AUTHOR_
 UPDATE wp_posts SET post_author=NEW_AUTHOR_ID WHERE post_author=OLD_AUTHOR_ID;
 Once this query has been executed, all posts from the old author now appear to have been written by the new author.
 
-```
