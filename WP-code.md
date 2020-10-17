@@ -454,7 +454,7 @@ function time_and_date_added($atts){
 ```
 
 
-``sh
+```sh
 Useful SQL Queries To Clean Up Your WordPress Database
 After years of usage, your WordPress database can contain weird characters, be filled with data you don’t need anymore, and so on. In this article, you will learn about SQL queries to clean up your WordPress database.
 
