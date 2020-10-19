@@ -604,6 +604,7 @@ Once this query has been executed, all posts from the old author now appear to h
 
 
 ## Customizing the WordPress Login
+For More Information https://codex.wordpress.org/Customizing_the_Login_Form
 ```sh
 ## Customizing the WordPress Login
 
