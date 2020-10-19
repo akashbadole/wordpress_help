@@ -602,8 +602,11 @@ Let’s consider that NEW_AUTHOR_ID is the ID of the new author, and OLD_AUTHOR_
 UPDATE wp_posts SET post_author=NEW_AUTHOR_ID WHERE post_author=OLD_AUTHOR_ID;
 Once this query has been executed, all posts from the old author now appear to have been written by the new author.
 
+
+## Customizing the WordPress Login
 ```sh
 ## Customizing the WordPress Login
+
 
 function my_login_logo() { ?>
     <style type="text/css">
