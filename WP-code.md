@@ -1,4 +1,4 @@
-# wordpress_help
+# WordPrea
 
 ## Wordpress Developer tools(Post Types, Custom Fields and other developer friendly plugins)
 Pods(https://wordpress.org/plugins/pods/)<br>
@@ -632,5 +632,23 @@ function my_login_logo_url_title() {
     return 'Your Site Name and Info';
 }
 add_filter( 'login_headertitle', 'my_login_logo_url_title' );
+
+```
+
+##  Adding White Label Branding for Dashboard
+
+```sh
+
+ Adding your branding logo in above the letters “Dashboard” in the administrator site.
+Open the custom-admin plugin that you have made from the previous tutorial. You simply adding PHP code to the custom-admin.php file as below:
+
+/**
+ * Adding White Label Branding for Dashboard
+ */
+ function aksh_admin_logo() {
+     echo '<br/> <img src="' .plugins_url('images/login-logo.png', __FILE__). '"/>';  
+     # or      echo '<br/> <img src="image file path"/>';  
+ }
+add_action( 'admin_notices', 'aksh_admin_logo' );
 
 ```
