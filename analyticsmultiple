@@ -1,0 +1,16 @@
+# multiple google analytics - pages, post
+
+
+add_action('wp_head', 'add_google_analytics');
+
+function add_google_analytics(){
+    global $post; 
+
+    if (is_page('page1')){ ?>
+        <!-- Analytics code #1 -->
+    <?php } else if (is_page('page2')) { ?>
+        <!-- Analytics code #2 -->
+    <?php } else { ?>
+        <!-- Analytics code #3 -->
+    <?php }
+ }
