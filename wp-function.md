@@ -1051,7 +1051,7 @@ gtag('config', 'AW-xxxxx');
  
 <!-- Event snippet for Satincorp_Account_Level_Code conversion page -->
 <script>
-  gtag('event', 'conversion', {'send_to': 'AW-xxxxx/rHfYCNuC5v8BEKX9yLkD'});
+  gtag('event', 'conversion', {'send_to': 'AW-xxxxx/xxxx'});
 </script>
     <?php
   }
