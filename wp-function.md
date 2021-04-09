@@ -1029,3 +1029,32 @@ window.addEventListener('scroll', () => {
 </script>
 ```
 
+## Single page code analytics
+
+```
+function a_thankyou_hook_javascript_akash() {
+  if (is_page  ('id')) { 
+    ?>
+      <!-- Global site tag (gtag.js) - Google Ads: xxxxx -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-xxxxx"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+ 
+
+gtag('config', 'AW-xxxxx');
+</script>
+ 
+ 
+ 
+<!-- Event snippet for Satincorp_Account_Level_Code conversion page -->
+<script>
+  gtag('event', 'conversion', {'send_to': 'AW-xxxxx/rHfYCNuC5v8BEKX9yLkD'});
+</script>
+    <?php
+  }
+}
+add_action('wp_head', 'a_thankyou_hook_javascript_akash');
+```
