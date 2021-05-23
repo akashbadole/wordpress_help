@@ -1064,3 +1064,600 @@ function disable_checkout_terms_and_conditions(){
         remove_action( 'woocommerce_checkout_terms_and_conditions', 'wc_checkout_privacy_policy_text', 20 );  
         remove_action( 'woocommerce_checkout_terms_and_conditions', 'wc_terms_and_conditions_page_content', 30 );  
 }
+
+
+### 1 – Add Payment Type to WooCommerce Admin Email
+
+```php
+add_action( 'woocommerce_email_after_order_table', 'add_payment_method_to_admin_new_order', 15, 2 );
+ 
+function add_payment_method_to_admin_new_order( $order, $is_admin_email ) {
+  if ( $is_admin_email ) {
+    echo '<p><strong>Payment Method:</strong> ' . $order->payment_method_title . '</p>';
+  }
+}
+```
+
+### 2 – Up-sells products per page / per line
+
+```php
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+add_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_upsells', 15 );
+ 
+if ( ! function_exists( 'woocommerce_output_upsells' ) ) {
+	function woocommerce_output_upsells() {
+	    woocommerce_upsell_display( 3,3 ); // Display 3 products in rows of 3
+	}
+}
+```
+### 1 – Replace WooCommerce default PayPal logo
+
+```php
+/*
+ * Replace WooCommerce default PayPal icon
+ */
+function paypal_checkout_icon() {
+ return 'https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_betalen_met_paypal_nl.jpg'; // write your own image URL here
+}
+add_filter( 'woocommerce_paypal_icon', 'paypal_checkout_icon' );
+```
+
+### 2 – Replace default product placeholder image
+
+```php
+/*
+* goes in theme functions.php or a custom plugin. Replace the image filename/path with your own :)
+*
+**/
+add_action( 'init', 'custom_fix_thumbnail' );
+ 
+function custom_fix_thumbnail() {
+  add_filter('woocommerce_placeholder_img_src', 'custom_woocommerce_placeholder_img_src');
+   
+	function custom_woocommerce_placeholder_img_src( $src ) {
+	$upload_dir = wp_upload_dir();
+	$uploads = untrailingslashit( $upload_dir['baseurl'] );
+	$src = $uploads . '/2012/07/thumb1.jpg';
+	 
+	return $src;
+	}
+}
+```
+
+### 3 – Remove “Products” from breadcrumb
+
+```php
+/*
+ * Hide "Products" in WooCommerce breadcrumb
+ */
+function woo_custom_filter_breadcrumbs_trail ( $trail ) {
+  foreach ( $trail as $k => $v ) {
+    if ( strtolower( strip_tags( $v ) ) == 'products' ) {
+      unset( $trail[$k] );
+      break;
+    }
+  }
+
+  return $trail;
+}
+
+add_filter( 'woo_breadcrumbs_trail', 'woo_custom_filter_breadcrumbs_trail', 10 );
+```
+
+### 4 – Empty cart
+
+```php
+/*
+ * Empty WooCommerce cart
+ */
+function my_empty_cart(){
+	global $woocommerce;
+	$woocommerce->cart->empty_cart(); 
+}
+add_action('init', 'my_empty_cart');
+```
+
+### 5 – Automatically add product to cart on visit
+
+```php
+/*
+ * Add item to cart on visit
+ */
+function add_product_to_cart() {
+	if ( ! is_admin() ) {
+		global $woocommerce;
+		$product_id = 64;
+		$found = false;
+		//check if product already in cart
+		if ( sizeof( $woocommerce->cart->get_cart() ) > 0 ) {
+			foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $values ) {
+				$_product = $values['data'];
+				if ( $_product->id == $product_id )
+					$found = true;
+			}
+			// if product not found, add it
+			if ( ! $found )
+				$woocommerce->cart->add_to_cart( $product_id );
+		} else {
+			// if no products in cart, add it
+			$woocommerce->cart->add_to_cart( $product_id );
+		}
+	}
+}
+add_action( 'init', 'add_product_to_cart' );
+```
+
+### 6 – Add a custom currency / symbol
+
+```php
+add_filter( 'woocommerce_currencies', 'add_my_currency' );
+ 
+function add_my_currency( $currencies ) {
+     $currencies['ABC'] = __( 'Currency name', 'woocommerce' );
+     return $currencies;
+}
+ 
+add_filter('woocommerce_currency_symbol', 'add_my_currency_symbol', 10, 2);
+ 
+function add_my_currency_symbol( $currency_symbol, $currency ) {
+     switch( $currency ) {
+          case 'ABC': $currency_symbol = '$'; break;
+     }
+     return $currency_symbol;
+}
+```
+
+### 7 – Change add to cart button text
+
+```php
+/**
+ * Change the add to cart text on single product pages
+ */
+function woo_custom_cart_button_text() {
+	return __('My Button Text', 'woocommerce');
+}
+add_filter('single_add_to_cart_text', 'woo_custom_cart_button_text');
+
+
+
+/**
+ * Change the add to cart text on product archives
+ */
+function woo_archive_custom_cart_button_text() {
+	return __( 'My Button Text', 'woocommerce' );
+}
+add_filter( 'add_to_cart_text', 'woo_archive_custom_cart_button_text' );
+```
+
+### 8 – Redirect subscription add to cart to checkout page
+
+```php
+/**
+ * Redirect subscription add to cart to checkout page
+ *
+ * @param string $url
+ */
+function custom_add_to_cart_redirect( $url ) {
+  
+  $product_id	= (int) $_REQUEST['add-to-cart'];
+	if ( class_exists( 'WC_Subscriptions_Product' ) ) {
+		if ( WC_Subscriptions_Product::is_subscription( $product_id ) ) {
+			return get_permalink(get_option( 'woocommerce_checkout_page_id' ) );
+		} else return $url;
+	} else return $url;
+	
+}
+add_filter('add_to_cart_redirect', 'custom_add_to_cart_redirect');
+```
+
+This snippet requires the Subscriptions plugin.
+
+### 9 – Redirect to checkout page after add to cart
+
+```php
+/**
+ * Redirect subscription add to cart to checkout page
+ *
+ * @param none
+ */
+function add_to_cart_checkout_redirect() {
+	wp_safe_redirect( get_permalink( get_option( 'woocommerce_checkout_page_id' ) ) );
+	die();
+}
+add_action( 'woocommerce_add_to_cart',  'add_to_cart_checkout_redirect', 11 );
+```
+
+### 10 – CC all emails
+
+```php
+ /**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Add another email recipient to all WooCommerce emails
+ *
+ */
+function woo_cc_all_emails() {
+  return 'Bcc: youremail@yourdomain.com' . "\r\n";
+}
+add_filter('woocommerce_email_headers', 'woo_cc_all_emails' );
+```
+
+### 11 – Send an email when a new order is completed with coupons used
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Send an email each time an order with coupon(s) is completed
+ * The email contains coupon(s) used during checkout process
+ *
+ */ 
+function woo_email_order_coupons( $order_id ) {
+        $order = new WC_Order( $order_id );
+        
+        if( $order->get_used_coupons() ) {
+        
+          $to = 'youremail@yourcompany.com';
+	        $subject = 'New Order Completed';
+	        $headers = 'From: My Name ' . "\r\n";
+	        
+	        $message = 'A new order has been completed.\n';
+	        $message .= 'Order ID: '.$order_id.'\n';
+	        $message .= 'Coupons used:\n';
+	        
+	        foreach( $order->get_used_coupons() as $coupon) {
+		        $message .= $coupon.'\n';
+	        }
+	        @wp_mail( $to, $subject, $message, $headers );
+        }
+}
+add_action( 'woocommerce_thankyou', 'woo_email_order_coupons' );
+```
+
+### 12 – Change related products number
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Change number of related products on product page
+ * Set your own value for 'posts_per_page'
+ *
+ */ 
+function woo_related_products_limit() {
+  global $product;
+	
+	$args = array(
+		'post_type'        		=> 'product',
+		'no_found_rows'    		=> 1,
+		'posts_per_page'   		=> 6,
+		'ignore_sticky_posts' 	=> 1,
+		'orderby'             	=> $orderby,
+		'post__in'            	=> $related,
+		'post__not_in'        	=> array($product->id)
+	);
+	return $args;
+}
+add_filter( 'woocommerce_related_products_args', 'woo_related_products_limit' );
+```
+
+### 13 – Exclude products from a particular category on the shop page
+
+```php
+ /**
+ * Remove products from shop page by category
+ *
+ */
+function woo_custom_pre_get_posts_query( $q ) {
+ 
+	if ( ! $q->is_main_query() ) return;
+	if ( ! $q->is_post_type_archive() ) return;
+	
+	if ( ! is_admin() && is_shop() ) {
+ 
+		$q->set( 'tax_query', array(array(
+			'taxonomy' => 'product_cat',
+			'field' => 'slug',
+			'terms' => array( 'shoes' ), // Don't display products in the shoes category on the shop page
+			'operator' => 'NOT IN'
+		)));
+	
+	}
+ 
+	remove_action( 'pre_get_posts', 'custom_pre_get_posts_query' );
+ 
+}
+add_action( 'pre_get_posts', 'woo_custom_pre_get_posts_query' );
+```
+
+### 14 – Change shop columns number
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Change product columns number on shop pages
+ *
+ */
+function woo_product_columns_frontend() {
+    global $woocommerce;
+
+    // Default Value also used for categories and sub_categories
+    $columns = 4;
+
+    // Product List
+    if ( is_product_category() ) :
+        $columns = 4;
+    endif;
+
+    //Related Products
+    if ( is_product() ) :
+        $columns = 2;
+    endif;
+
+    //Cross Sells
+    if ( is_checkout() ) :
+        $columns = 4;
+    endif;
+
+	return $columns;
+}
+add_filter('loop_shop_columns', 'woo_product_columns_frontend');
+```
+
+### 15 – Disable WooCommerce tabs
+
+```php
+ /**
+ * Remove product tabs
+ *
+ */
+function woo_remove_product_tab($tabs) {
+
+    unset( $tabs['description'] );      		// Remove the description tab
+    unset( $tabs['reviews'] ); 					// Remove the reviews tab
+    unset( $tabs['additional_information'] );  	// Remove the additional information tab
+
+ 	return $tabs;
+ 
+}
+add_filter( 'woocommerce_product_tabs', 'woo_remove_product_tab', 98);
+```
+
+### 16 – Remove breadcrumb
+
+```php
+ /**
+ * Remove WooCommerce BreadCrumb
+ *
+ */
+remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20);
+```
+
+### 17 – Restrict shipping countries list
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Restrict shipping countries list
+ *
+ */
+function woo_override_checkout_fields( $fields ) { 
+
+	$fields['shipping']['shipping_country'] = array(
+		'type'      => 'select',
+		'label'     => __('My New Country List', 'woocommerce'),
+		'options' 	=> array('AU' => 'Australia')
+	);
+
+	return $fields; 
+} 
+add_filter( 'woocommerce_checkout_fields' , 'woo_override_checkout_fields' );
+```
+
+### 18 – Replace “Free!” product string
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Replace "Free!" by a custom string
+ *
+ */
+function woo_my_custom_free_message() {
+	return "This product is FREE!";
+}
+
+add_filter('woocommerce_free_price_html', 'woo_my_custom_free_message');
+```
+
+### 19 – Hide ALL other shipping methods when Free Shipping is available
+
+```php
+// Hide ALL shipping options when free shipping is available
+add_filter( 'woocommerce_available_shipping_methods', 'hide_all_shipping_when_free_is_available' , 10, 1 );
+ 
+/**
+* Hide ALL Shipping option when free shipping is available
+*
+* @param array $available_methods
+*/
+function hide_all_shipping_when_free_is_available( $available_methods ) {
+ 
+  	if( isset( $available_methods['free_shipping'] ) ) :
+		
+		// Get Free Shipping array into a new array
+		$freeshipping = array();
+		$freeshipping = $available_methods['free_shipping'];
+ 
+		// Empty the $available_methods array
+		unset( $available_methods );
+ 
+		// Add Free Shipping back into $avaialble_methods
+		$available_methods = array();
+		$available_methods[] = $freeshipping;
+ 
+	endif;
+ 
+	return $available_methods;
+}
+```
+
+### 20 – Make checkout “state” field not required
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Make "state" field not required on checkout
+ *
+ */
+ 
+add_filter( 'woocommerce_billing_fields', 'woo_filter_state_billing', 10, 1 );
+add_filter( 'woocommerce_shipping_fields', 'woo_filter_state_shipping', 10, 1 );
+
+function woo_filter_state_billing( $address_fields ) { 
+	$address_fields['billing_state']['required'] = false;
+	return $address_fields;
+}
+
+function woo_filter_state_shipping( $address_fields ) { 
+	$address_fields['shipping_state']['required'] = false;
+	return $address_fields;
+}
+```
+
+### 21 – Create a coupon programatically
+
+```php
+$coupon_code = 'UNIQUECODE'; // Code
+$amount = '10'; // Amount
+$discount_type = 'fixed_cart'; // Type: fixed_cart, percent, fixed_product, percent_product
+					
+$coupon = array(
+	'post_title' => $coupon_code,
+	'post_content' => '',
+	'post_status' => 'publish',
+	'post_author' => 1,
+	'post_type'		=> 'shop_coupon'
+);
+					
+$new_coupon_id = wp_insert_post( $coupon );
+					
+// Add meta
+update_post_meta( $new_coupon_id, 'discount_type', $discount_type );
+update_post_meta( $new_coupon_id, 'coupon_amount', $amount );
+update_post_meta( $new_coupon_id, 'individual_use', 'no' );
+update_post_meta( $new_coupon_id, 'product_ids', '' );
+update_post_meta( $new_coupon_id, 'exclude_product_ids', '' );
+update_post_meta( $new_coupon_id, 'usage_limit', '' );
+update_post_meta( $new_coupon_id, 'expiry_date', '' );
+update_post_meta( $new_coupon_id, 'apply_before_tax', 'yes' );
+update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
+```
+
+### 22 – Change email subject lines
+
+```php
+/*
+ * Subject filters: 
+ *   woocommerce_email_subject_new_order
+ *   woocommerce_email_subject_customer_procesing_order
+ *   woocommerce_email_subject_customer_completed_order
+ *   woocommerce_email_subject_customer_invoice
+ *   woocommerce_email_subject_customer_note
+ *   woocommerce_email_subject_low_stock
+ *   woocommerce_email_subject_no_stock
+ *   woocommerce_email_subject_backorder
+ *   woocommerce_email_subject_customer_new_account
+ *   woocommerce_email_subject_customer_invoice_paid
+ **/
+add_filter('woocommerce_email_subject_new_order', 'change_admin_email_subject', 1, 2);
+ 
+function change_admin_email_subject( $subject, $order ) {
+	global $woocommerce;
+ 
+	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+ 
+	$subject = sprintf( '[%s] New Customer Order (# %s) from Name %s %s', $blogname, $order->id, $order->billing_first_name, $order->billing_last_name );
+ 
+	return $subject;
+}
+```
+
+### 23 – Add custom fee to cart
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Add custom fee to cart automatically
+ *
+ */
+function woo_add_cart_fee() {
+
+	global $woocommerce;
+	
+	if ( is_cart() ) {
+		$woocommerce->cart->add_fee( __('Custom', 'woocommerce'), 5 );
+	}
+	
+}
+add_action( 'woocommerce_before_cart_table', 'woo_add_cart_fee' );
+```
+
+### 24 – Custom added to cart message
+
+```php
+/**
+ * Custom Add To Cart Messages
+ * Add this to your theme functions.php file
+ **/
+add_filter( 'woocommerce_add_to_cart_message', 'custom_add_to_cart_message' );
+function custom_add_to_cart_message() {
+	global $woocommerce;
+ 
+	// Output success messages
+	if (get_option('woocommerce_cart_redirect_after_add')=='yes') :
+ 
+		$return_to 	= get_permalink(woocommerce_get_page_id('shop'));
+ 
+		$message 	= sprintf('<a href="%s" class="button">%s</a> %s', $return_to, __('Continue Shopping →', 'woocommerce'), __('Product successfully added to your cart.', 'woocommerce') );
+ 
+	else :
+ 
+		$message 	= sprintf('<a href="%s" class="button">%s</a> %s', get_permalink(woocommerce_get_page_id('cart')), __('View Cart →', 'woocommerce'), __('Product successfully added to your cart.', 'woocommerce') );
+ 
+	endif;
+ 
+		return $message;
+}
+```
+
+### 25 – Add payment method to admin email
+
+```php
+/**
+ * WooCommerce Extra Feature
+ * --------------------------
+ *
+ * Add payment method to admin new order email
+ *
+ */
+add_action( 'woocommerce_email_after_order_table', 'woo_add_payment_method_to_admin_new_order', 15, 2 ); 
+
+function woo_add_payment_method_to_admin_new_order( $order, $is_admin_email ) { 
+	if ( $is_admin_email ) { 
+	echo '<p><strong>Payment Method:</strong> ' . $order->payment_method_title . '</p>'; 
+	} 
+}
+```
