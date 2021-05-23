@@ -306,7 +306,7 @@ function woo_rename_tab($tabs) {
 }
 
 ## Add a custom field to a product variation
-
+```
 //Display Fields  
 add_action( 'woocommerce_product_after_variable_attributes', 'variable_fields', 10, 2 );  
 //JS to add fields for new variations  
@@ -348,6 +348,7 @@ function variable_fields_process( $post_id ) {
 	endif;  
 }
 
+```
 ## List WooCommerce product Categories
 
 $args = array(  
@@ -471,7 +472,7 @@ add_filter(‘woocommerce_email_order_meta_keys’, ‘my_custom_order_meta_keys
 }
 
 ## Adding a Custom Field to Checkout page
-
+```
 Let’s add a new field to checkout, after the order notes, by hooking into the following:
 
 add_action( 'woocommerce_after_order_notes', 'my_custom_checkout_field' );function my_custom_checkout_field( $checkout ) {echo '<div id="my_custom_checkout_field"><h2>' . __('My Field') . '</h2>';woocommerce_form_field( 'my_field_name', array(  
@@ -496,7 +497,7 @@ add_action( 'woocommerce_checkout_update_order_meta', 'my_custom_checkout_field_
         update_post_meta( $order_id, 'My Field', sanitize_text_field( $_POST['my_field_name'] ) );  
     }  
 }
-
+```
 ## Add Content Under “Place Order” Button at WooCommerce Checkout
 
 add_action( 'woocommerce_review_order_after_submit', 'bbloomer_privacy_message_below_checkout_button' );  
@@ -518,7 +519,7 @@ function after_add_to_cart_btn(){
 }
 
 ## Reorder Checkout Fields in WooCommerce
-
+```
 First thing you have to keep in mind, that fields are separated into groups, and actually there are 4 groups:
 
 -   billing — Billing Address
@@ -552,7 +553,7 @@ Here are the priority number list for billing fields:
 -   billing_postcode 90
 -   billing_phone 100
 -   billing_email 110
-
+```
 ## Check if Product Belongs to a Product Category or Tag
 
 if( has_term( 4, ‘product_cat’ ) ) {  
@@ -696,7 +697,7 @@ function hide_rentals_from_search_pre_get_posts( $query ) {
 }add_action( ‘pre_get_posts’, ‘hide_rentals_from_search_pre_get_posts’);
 
 ## Remove WooCommerce Checkout fields
-
+```
 add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );  
     
 function custom_override_checkout_fields( $fields ) {   
@@ -731,9 +732,10 @@ function custom_override_checkout_fields( $fields ) {
     unset($fields['billing']['billing_state']);  
     return $fields;  
 }
+```
 
 ## Make Woocommerce Shopping Cart responsive
-
+```
 Use the code below and include this in your stylesheet:
 
 [@media](http://twitter.com/media) screen and (max-width: 766px) and (min-width: 300px) { /* START Make the cart table responsive */[@media](http://twitter.com/media) screen and (max-width: 600px) { / Force table to not be like tables anymore /  
@@ -899,9 +901,9 @@ margin-bottom: 1em;
 display: none;  
 } }  
 /* END Make the cart table responsive */ }
-
+```
 ## Check whether user has paid for a product already in WooCommerce
-
+```
 function CheckWhetherUserPaid() {$bought = false; // Set HERE ine the array your specific target product IDs$prod_arr = array( '21', '67' ); // Get all customer orders$customer_orders = get_posts( array(  
  'numberposts' => -1,  
  'meta_key' => '_customer_user',  
@@ -918,9 +920,9 @@ function CheckWhetherUserPaid() {$bought = false; // Set HERE ine the array your
  }  
 }}// return “true” if one the specifics products have been bought before by customer  
 return $bought;}
-
+```
 ## WooCommerce Holiday/Pause Mode
-
+```
 // Trigger Holiday Mode  
 add_action ('init', 'woocommerce_holiday_mode');  
    
@@ -941,9 +943,9 @@ function woocommerce_holiday_mode() {
 function wc_shop_disabled() {  
         wc_print_notice( 'Our Online Shop is Closed Today :)', 'error');  
 }
-
+```
 ## Deny Checkout if User Has Pending Orders
-
+```
 Deny Checkout if User Has Pending Ordersadd_action('woocommerce_after_checkout_validation', 'deny_checkout_user_pending_orders');  
    
 function deny_checkout_user_pending_orders( $posted ) {  
@@ -969,7 +971,7 @@ function deny_checkout_user_pending_orders( $posted ) {
  }  
    
 }
-
+```
 ## Change Autofocus Field at WooCommerce Checkout
 
 add_filter( 'woocommerce_checkout_fields', 'change_autofocus_checkout_field' );  
@@ -981,7 +983,7 @@ function change_autofocus_checkout_field( $fields ) {
 }
 
 ## Show Message After Country Selection @ Checkout
-
+```
 // Part 1  
 // Add the message notification and place it over the billing section  
 // The "display:none" hides it by default  
@@ -1026,9 +1028,9 @@ function show_notice_shipping(){
     <?php  
        
 }
-
+```
 ## Disable Payment Method for Specific Category
-
+```
 add_filter( 'woocommerce_available_payment_gateways', 'unset_gateway_by_category' );  
     
 function unset_gateway_by_category( $available_gateways ) {  
@@ -1048,7 +1050,7 @@ function unset_gateway_by_category( $available_gateways ) {
     if ( $unset == true ) unset( $available_gateways['cheque'] );  
     return $available_gateways;  
 }
-
+```
 ## Restrict WooCommerce order notes field to a number of characters
 
 add_filter( 'woocommerce_checkout_fields', 'filter_checkout_fields' );   
