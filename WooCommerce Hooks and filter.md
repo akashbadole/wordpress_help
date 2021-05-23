@@ -350,7 +350,7 @@ function variable_fields_process( $post_id ) {
 
 ```
 ## List WooCommerce product Categories
-
+```
 $args = array(  
     'number'     => $number,  
     'orderby'    => $orderby,  
@@ -370,7 +370,7 @@ $count = count($product_categories);
      }  
      echo "</ul>";  
  }
-
+```
 ## Change “from” email address
 
 function woo_custom_wp_mail_from_name() {  
@@ -386,7 +386,7 @@ function woo_custom_wp_mail_from() {
 add_filter( 'wp_mail_from_name', 'woo_custom_wp_mail_from_name', 99 );
 
 ## Return featured products ids
-
+```
 function woo_get_featured_product_ids() {  
 	// Load from cache  
 	$featured_product_ids = get_transient( 'wc_featured_products' );  
@@ -421,7 +421,7 @@ function woo_get_featured_product_ids() {
   
 	return $featured_product_ids;  
 }
-
+```
 ## Set minimum order amount
 
 add_action( 'woocommerce_checkout_process', 'wc_minimum_order_amount' );  
